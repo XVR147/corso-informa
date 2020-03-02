@@ -18,3 +18,6 @@ Marketplace di plugin per Wordpress ecc.
 + [(EN) Dritte pre-installazione Wordpress](https://wordpress.org/support/article/before-you-install/) 
 + [(EN) Guida all'installazione di Wordpress](https://wordpress.org/support/article/how-to-install-wordpress/)
 + [(EN) Guida alla struttura file/cartelle di Wordpress](https://www.wpbeginner.com/beginners-guide/beginners-guide-to-wordpress-file-and-directory-structure/)
++ [(EN) Thread di StackOverflow per abilitare l'SSL su XAMPP](https://stackoverflow.com/questions/5801425/enabling-ssl-with-xampp)
++ [(EN) Guida ai custom post type di wordpress](https://www.smashingmagazine.com/2012/11/complete-guide-custom-post-types/)
++ [(EN) Documentazione ufficiale della funzione `register_post_type()`](https://developer.wordpress.org/reference/functions/register_post_type)

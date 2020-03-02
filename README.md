@@ -9,9 +9,12 @@ Raccolta di segnalibri per il Corso Informa
 Marketplace di plugin per Wordpress ecc.
 + [Wordpress Themes](https://wordpress.org/themes/): Raccolta di temi sul sito ufficiale Wordpress
 + [Wordpress Plugins](https://wordpress.org/plugins/): Raccolta di plugin gratis sul sito ufficiale Wordpress
-## Articoli utili
+## Articoli utili (IT)
 + [10 Editor HTML Gratuiti](https://kinsta.com/it/blog/editor-html-gratuiti/)
++ [Guida rapida all'UML](https://www.tutorialspoint.com/uml/index.htm)
+## Articoli utili (EN)
++ [(EN) Come installare XAMPP e Wordpress su localhost di Windows](https://premium.wpmudev.org/blog/setting-up-xampp/)
++ [(EN) Installazione locale di wordpress su Mac in modo facile](https://medium.com/@sunilk/wordpress-local-install-on-your-mac-made-easy-d605c5a0af1c)
 + [(EN) Dritte pre-installazione Wordpress](https://wordpress.org/support/article/before-you-install/) 
 + [(EN) Guida all'installazione di Wordpress](https://wordpress.org/support/article/how-to-install-wordpress/)
 + [(EN) Guida alla struttura file/cartelle di Wordpress](https://www.wpbeginner.com/beginners-guide/beginners-guide-to-wordpress-file-and-directory-structure/)
-+ [Guida rapida all'UML](https://www.tutorialspoint.com/uml/index.htm)

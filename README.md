@@ -21,3 +21,4 @@ Marketplace di plugin per Wordpress ecc.
 + [(EN) Thread di StackOverflow per abilitare SSL su XAMPP](https://stackoverflow.com/questions/5801425/enabling-ssl-with-xampp)
 + [(EN) Guida ai custom post type di wordpress](https://www.smashingmagazine.com/2012/11/complete-guide-custom-post-types/)
 + [(EN) Documentazione ufficiale della funzione `register_post_type()`](https://developer.wordpress.org/reference/functions/register_post_type)
++ [(EN) Guida alla creazione di un certificato SSL per XAMPP](https://shellcreeper.com/how-to-create-valid-ssl-in-localhost-for-xampp/)

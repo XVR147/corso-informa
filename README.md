@@ -34,3 +34,5 @@ Marketplace di plugin per Wordpress ecc.
 + [(EN) Guida all'installazione di Wordpress](https://wordpress.org/support/article/how-to-install-wordpress/)
 + [(EN) Documentazione ufficiale della funzione `register_post_type()`](https://developer.wordpress.org/reference/functions/register_post_type)
 + [(EN) Documentazione ufficiale per il riferimento classi](https://codex.wordpress.org/Class_Reference/wpdb)
+
++ [Daniele] La mia modifica è la migliore modifica possibile!

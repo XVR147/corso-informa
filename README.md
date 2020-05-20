@@ -35,3 +35,4 @@ Marketplace di plugin per Wordpress ecc.
 + [(EN) Documentazione ufficiale della funzione `register_post_type()`](https://developer.wordpress.org/reference/functions/register_post_type)
 + [(EN) Documentazione ufficiale per il riferimento classi](https://codex.wordpress.org/Class_Reference/wpdb)
 
+bla bla bla bla

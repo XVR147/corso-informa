@@ -2,8 +2,7 @@
 
 Raccolta di segnalibri per il Corso Informa
 
-VVVVV
-
+VVVVV - WWWWW
 ## Libri
 L'antico testamento:
 + [Wordpress Bible](https://blondwarez.files.wordpress.com/2012/08/wordpress-bible.pdf)

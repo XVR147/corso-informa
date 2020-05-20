@@ -3,7 +3,7 @@
 Raccolta di segnalibri per il Corso Informa
 
 ## Libri
-
+L'antico testamento:
 + [Wordpress Bible](https://blondwarez.files.wordpress.com/2012/08/wordpress-bible.pdf)
 
 ## Siti utili
@@ -34,5 +34,3 @@ Marketplace di plugin per Wordpress ecc.
 + [(EN) Guida all'installazione di Wordpress](https://wordpress.org/support/article/how-to-install-wordpress/)
 + [(EN) Documentazione ufficiale della funzione `register_post_type()`](https://developer.wordpress.org/reference/functions/register_post_type)
 + [(EN) Documentazione ufficiale per il riferimento classi](https://codex.wordpress.org/Class_Reference/wpdb)
-
-bla bla bla bla

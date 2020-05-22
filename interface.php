@@ -30,7 +30,9 @@ class quadril implements geom{
 	}
 
 	public function volume(){
-		$volume = $this->area() * $this->altSol;
+		//la funzione area viene letta come una stringa in questo punto non effettuando così il calcolo
+		//$volume = $this->area() * $this->altSol;
+		$volume = $this->base * $this->altezza* $this->altSol;
 		return $volume;
 	}
 

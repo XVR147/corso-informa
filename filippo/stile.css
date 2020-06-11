@@ -1,0 +1,21 @@
+.textover {
+    position: absolute;
+    top: 30%;
+    left: 35%;
+    transform: translate(-50%, -50%);
+    font-size: 70px;
+    color:lightgreen;
+    font-weight: bold;
+  }
+.nav-link{
+  font-weight: bold;
+  color:rgb(34, 199, 34)!important;
+}
+#logo{
+  font-family: 'Orbitron', sans-serif;
+  font-weight: bold;
+  font-size: 36px;
+}
+.foto{
+  cursor: pointer;
+}

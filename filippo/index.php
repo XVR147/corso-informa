@@ -142,11 +142,10 @@ $tabCampi->getCampi();
   </div>
 </form><br>
 <div class="posizione">
-  <button type="submit" class="btn btn-primary" onclick="salvaModifica()">Salva</button>
+  <button class="btn btn-primary" id="salvaModifica">Salva</button>
   <button type="submit" class="btn btn-danger float-right" onclick="annulla()">Annulla</button>
 </div>
 </div>
-
 
 
 
@@ -158,6 +157,7 @@ $tabCampi->getCampi();
   </body>
   </html>
   <script>
+
 function clicksoci(){
   $("#carosello").hide();
   $("#soci").fadeIn();
@@ -241,12 +241,31 @@ function salva(){
       $("#surnameUp").val(cognome);
       $("#datadinascitaUp").val(data);
       $("#codicefiscUp").val(codicef);
-      }
-    
+        };
+
+     $("#salvaModifica").click(function(){
+      let nomemod=$("#nomeUp").val();
+      let cognomemod=$("#surnameUp").val();
+      let datamod=$("#datadinascitaUp").val();
+      let codicemod=$("#codicefiscUp").val();
+      $.ajax({
+        url:"modifica.php",
+        method:"POST",
+        data:"nome="+nomemod+"&cognome="+cognomemod+"&datamod="+datamod+"&codicemod="+codicemod,
+        type:JSON,
+        success:function(data){
+        data=JSON.parse(data);
+        console.log(data["nome"]);
+        }
+
+      })
+     })
+      
+
 </script>
 <?php
 if(isset($_GET["success"])){
-      echo '<script>$(document).ready(function(){
+      echo '<script>  
           clicksoci();
           $("#successo").fadeIn();
             })</script>';

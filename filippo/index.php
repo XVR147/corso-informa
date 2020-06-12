@@ -78,7 +78,8 @@ $tabSoci->getSoci();
 </div>
 <!--Errore-->
 <div id="errore" style="display:none;"><span style="color:red;">Registrazione non effettuata! Riprova</span></div>
-
+<!--Successo modifica-->
+<div id="successoMod" style="display:none;"><span style="color:green;">Socio numero: <?php if(isset($_GET["success2"])){echo $_GET["id"];} ?> modificato con successo</span></div>
 <!--Tabella campi tramite query-->
 <div id="campi" style="display:none;">
   <?php
@@ -120,6 +121,7 @@ $tabCampi->getCampi();
 <!--Form modifica socio-->
 <div id="formMod"class="container" style="display:none;">
   <form id="formUp"action="modifica.php" method="POST">
+    <input type="hidden" id="getId">
     <div class="form-group">
       <label for="exampleInputEmail1">Nome<small style="color:red;">*</small></label>
       <input type="text"  class="form-control" id="nomeUp" aria-describedby="emailHelp" name="nameUp">
@@ -164,11 +166,14 @@ function clicksoci(){
   $("#bottoni").fadeIn();
   $("#formAdd").hide();
   $("#campi").hide();
+  $("#formMod").hide();
+  $("#successoMod").hide();
 }
 function add(){
   $("#soci").hide();
   $("#bottoni").hide();
   $("#formAdd").fadeIn();
+  $("#successoMod").hide();
 
 }
 function annulla(){
@@ -176,6 +181,7 @@ function annulla(){
   $("#soci").fadeIn();
   $("#bottoni").fadeIn();
   $("#formMod").hide();
+  $("#successoMod").hide();
 }
 function clickcampi(){
 $("#carosello").hide();
@@ -183,6 +189,7 @@ $("#campi").fadeIn();
 $("#soci").hide();
 $("#bottoni").hide();
 $("#successo").hide();
+$("#successoMod").hide();
 }
 function salva(){
   let nomesocio=$("#nome").val();
@@ -237,6 +244,7 @@ function salva(){
       function update(id,nome,cognome,data,codicef){
       $("#formMod").fadeIn();
       $("#soci").hide();
+      $("#getId").val(id);
       $("#nomeUp").val(nome);
       $("#surnameUp").val(cognome);
       $("#datadinascitaUp").val(data);
@@ -244,18 +252,22 @@ function salva(){
         };
 
      $("#salvaModifica").click(function(){
-      let nomemod=$("#nomeUp").val();
-      let cognomemod=$("#surnameUp").val();
-      let datamod=$("#datadinascitaUp").val();
-      let codicemod=$("#codicefiscUp").val();
-      $.ajax({
-        url:"modifica.php",
-        method:"POST",
-        data:"nome="+nomemod+"&cognome="+cognomemod+"&datamod="+datamod+"&codicemod="+codicemod,
+       let id=$("#getId").val();
+       let nomemod=$("#nomeUp").val();
+       let cognomemod=$("#surnameUp").val();
+       let datamod=$("#datadinascitaUp").val();
+       let codicemod=$("#codicefiscUp").val();
+       $.ajax({
+         url:"modifica.php",
+         method:"POST",
+         data:"id="+id+"&nome="+nomemod+"&cognome="+cognomemod+"&datamod="+datamod+"&codicemod="+codicemod,
         type:JSON,
         success:function(data){
         data=JSON.parse(data);
-        console.log(data["nome"]);
+        console.log(data);
+        if(data["risultato"]){
+        window.location.href="index.php?success2&id="+data["id"];
+        }
         }
 
       })
@@ -268,7 +280,7 @@ if(isset($_GET["success"])){
       echo '<script>  
           clicksoci();
           $("#successo").fadeIn();
-            })</script>';
+          </script>';
           }
 
 if(isset($_GET["error"])){
@@ -278,5 +290,12 @@ if(isset($_GET["error"])){
                 $("#errore").fadeIn();
                  })</script>';
               }
+         if(isset($_GET["success2"])){
+                echo '<script>  
+                    clicksoci();
+                    $("#successoMod").fadeIn();
+                    
+                    </script>';
+                    }
 
 ?>

@@ -88,6 +88,12 @@ $tabCampi->getCampi();
 ?>
 </div>
 
+<!-- Tabella prenotazioni -->
+<div id="prenotazioni" style="display:none;">
+
+</div>
+
+
 <!--Form aggiungi socio-->
 <div id="formAdd"class="container" style="display:none;">
   <form id="formagg"action="nuovisoci.php" method="POST">
@@ -311,6 +317,27 @@ function cancella(iddelete){
       })
   }     
 }
+
+function clickprenotazioni(){
+  $("#carosello").hide();
+  $("#campi").hide();
+  $("#soci").hide();
+  $("#prenotazioni").show();
+    $.ajax({
+      url:"prenotazioni.php",
+      method:"POST",
+      type:JSON,
+      success:function(response){
+        var risp = JSON.parse(response);
+        let tabella = '<table class="table table-bordered"><thead><tr><th scope="col">#</th><th scope="col">Data prenotazione</th><th scope="col">Nome campo</th><th scope="col">Tipo campo</th><th scope="col">Socio</th></tr></thead><tbody>';
+        for(let i=0; i<risp.length; i++){
+          tabella += '<tr><th scope="col">'+risp['id']+'</th><td>'+risp['data_prenotazione']+'</td><td>'+risp['nome_campo']+'</td><td>'+risp['tipo_campo']+'</td><td>'+risp['nome_socio']+'</td></tr>';
+        }
+        tabella += '</tbody></table>';
+        $('#prenotazioni').append(tabella);
+      }
+    })
+  }
       
 
 </script>

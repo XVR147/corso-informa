@@ -32,7 +32,7 @@ include("classitennis.php");
         <a class="nav-link" href="#" onclick="clickcampi()">Campi da gioco</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Prenotazioni</a>
+        <a class="nav-link" href="#" onclick="clickprenotazioni()">Prenotazioni</a>
       </li>
     </ul>
   </div>
@@ -196,10 +196,10 @@ function salva(){
   let cognomesocio=$("#surname");
   let cfsocio=$("#codicefisc");
   let nascitasocio=$("#datadinascita");
-  
-  
-  validation(nomesocio,cognomesocio,cfsocio,nascitasocio);
-
+  let contatore=validation(nomesocio,cognomesocio,cfsocio,nascitasocio);
+  if (contatore==0){
+    $('#formagg').submit();
+  }
 }
       function update(id,nome,cognome,data,codicef){
       $("#formMod").fadeIn();
@@ -213,25 +213,29 @@ function salva(){
 
      $("#salvaModifica").click(function(){
        let id=$("#getId").val();
-       let nomemod=$("#nomeUp").val();
-       let cognomemod=$("#surnameUp").val();
-       let datamod=$("#datadinascitaUp").val();
-       let codicemod=$("#codicefiscUp").val();
-       validation(nomemod,cognomemod,datamod,codicemod);
-       /* $.ajax({
+       let nomemod=$("#nomeUp");
+       let cognomemod=$("#surnameUp");
+       let datamod=$("#datadinascitaUp");
+       let codicemod=$("#codicefiscUp");
+       let contatore=validation(nomemod,cognomemod,codicemod,datamod);
+       console.log(cognomemod);
+       if (contatore==0){
+
+        $.ajax({
          url:"modifica.php",
          method:"POST",
-         data:"id="+id+"&nome="+nomemod+"&cognome="+cognomemod+"&datamod="+datamod+"&codicemod="+codicemod,
+         data:"id="+id+"&nome="+nomemod.val()+"&cognome="+cognomemod.val()+"&datamod="+datamod.val()+"&codicemod="+codicemod.val(),
         type:JSON,
         success:function(data){
         data=JSON.parse(data);
         console.log(data);
         if(data["risultato"]){
         window.location.href="index.php?success2&id="+data["id"];
+        
         }
         }
 
-      }) */
+      }) }
      }) 
 
      function validation(inputnome,inputcognome,inputcodicef,inputdata){
@@ -284,6 +288,29 @@ function salva(){
      }
      return contatore;
      }
+
+function cancella(iddelete){
+  
+  var result = confirm("Sei sicuro di voler cancellare questo campo?");
+  if (result){
+
+      $.ajax({
+          url:"elimina.php",
+          method:"POST",
+          data:"id="+iddelete,
+          type:JSON,
+          success:function(data){
+            data=JSON.parse(data);
+            console.log(data);
+            if(data["risultato"]){
+            window.location.href="index.php?successdelete&id="+data["id"];
+          
+            }
+          }
+
+      })
+  }     
+}
       
 
 </script>
@@ -302,12 +329,16 @@ if(isset($_GET["error"])){
                 $("#errore").fadeIn();
                  })</script>';
               }
-         if(isset($_GET["success2"])){
-                echo '<script>  
-                    clicksoci();
-                    $("#successoMod").fadeIn();
-                    
-                    </script>';
-                    }
-
+if(isset($_GET["success2"])){
+      echo '<script>  
+          clicksoci();
+          $("#successoMod").fadeIn();
+          </script>';
+          }
+if(isset($_GET["successdelete"])){
+  echo '<script>  
+      clicksoci();
+      $("#successo").fadeIn();
+      </script>';
+      }
 ?>

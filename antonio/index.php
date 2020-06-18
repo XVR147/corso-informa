@@ -1,6 +1,8 @@
 <?php
 require("database.php");
 include("classitennis.php");
+$classcampo = new campi($db);
+$classsocio = new soci($db);
 ?>
 <!doctype html>
 <html lang="en">
@@ -39,6 +41,9 @@ include("classitennis.php");
   <div id="bottoni" class="btnsss" style="display:none;">
     <button id="addSoci" class="btn btn-success" onclick="add()">Aggiungi socio</button>
   </div>
+  <div id="bottoni2" class="btnsss" style="display:none;">
+    <button id="addPre" class="btn btn-success" onclick="addPre()">Aggiungi prenotazione</button>
+  </div>
 </nav>
 
 <!--Carosello-->
@@ -71,6 +76,7 @@ include("classitennis.php");
 <div id="soci" style="display:none;">
 <!--Successo-->
 <div id="successo" style="display:none;"><span style="color:green;">Registrazione effettuata con successo</span></div>
+
 <?php
 $tabSoci=new soci($db);
 $tabSoci->getSoci();
@@ -87,6 +93,8 @@ $tabCampi=new campi($db);
 $tabCampi->getCampi();
 ?>
 </div>
+
+<div id="successPre" style="display:none;"><span style="color:green;">Prenotazione effettuata con successo</span></div>
 
 <!-- Tabella prenotazioni -->
 <div id="prenotazioni" style="display:none;">
@@ -155,6 +163,38 @@ $tabCampi->getCampi();
 </div>
 </div>
 
+<!-- Form Aggiungi Prenotazione -->
+
+<div id="formPre"class="container" style="display:none;">
+  <form id="formaggPre"action="prenotasub.php" method="POST">
+    <div class="form-group">
+      <label for="soci">Scegli Socio<small style="color:red;">*</small></label>
+          <select name="soci" id="soci" class="custom-select">
+              <?php
+                $classsocio->getListaSoci();
+              ?>
+          </select>
+           <small id="smallnomeaggiungi"></small>
+    </div>
+    <div class="form-group">
+    <label for="exampleInputPassword1">Campi<small style="color:red;">*</small></label>
+    <select name="campi" id="campi" class="custom-select">
+              <?php
+                $classcampo->getListaCampi();
+              ?>
+          </select>
+           <small id="smallnomeaggiungi"></small>
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">Data di prenotazione<small style="color:red;">*</small></label>
+    <input type="datetime-local" class="form-control" id="datadiprenotazione"name="prenota">
+  </div>
+</form><br>
+<div class="posizione">
+  <button type="submit" class="btn btn-primary" onclick="salvaPre()">Aggiungi</button>
+  <button type="submit" class="btn btn-danger float-right" onclick="annulla()">Annulla</button>
+</div>
+</div>
 
 
 <!-- Optional JavaScript -->
@@ -174,6 +214,8 @@ function clicksoci(){
   $("#campi").hide();
   $("#formMod").hide();
   $("#successoMod").hide();
+  $("#prenotazioni").hide();
+  $("#bottoni2").hide();
 }
 function add(){
   $("#soci").hide();
@@ -196,6 +238,8 @@ $("#soci").hide();
 $("#bottoni").hide();
 $("#successo").hide();
 $("#successoMod").hide();
+$("#prenotazioni").hide();
+$("#bottoni2").hide();
 }
 function salva(){
   let nomesocio=$("#nome");
@@ -206,6 +250,10 @@ function salva(){
   if (contatore==0){
     $('#formagg').submit();
   }
+}
+
+function salvaPre(){
+  $('#formaggPre').submit();
 }
       function update(id,nome,cognome,data,codicef){
       $("#formMod").fadeIn();
@@ -323,6 +371,10 @@ function clickprenotazioni(){
   $("#campi").hide();
   $("#soci").hide();
   $("#prenotazioni").show();
+  $("#prenotazioni").empty();
+  $("#bottoni").hide();
+  $("#bottoni2").show();
+
     $.ajax({
       url:"prenotazioni.php",
       method:"POST",
@@ -331,14 +383,20 @@ function clickprenotazioni(){
         var risp = JSON.parse(response);
         let tabella = '<table class="table table-bordered"><thead><tr><th scope="col">#</th><th scope="col">Data prenotazione</th><th scope="col">Nome campo</th><th scope="col">Tipo campo</th><th scope="col">Socio</th></tr></thead><tbody>';
         for(let i=0; i<risp.length; i++){
-          tabella += '<tr><th scope="col">'+risp['id']+'</th><td>'+risp['data_prenotazione']+'</td><td>'+risp['nome_campo']+'</td><td>'+risp['tipo_campo']+'</td><td>'+risp['nome_socio']+'</td></tr>';
+          tabella += '<tr><th scope="col">'+risp[i]['id']+'</th><td>'+risp[i]['data_prenotazione']+'</td><td>'+risp[i]['nome_campo']+'</td><td>'+risp[i]['tipo_campo']+'</td><td>'+risp[i]['nome_socio']+'</td></tr>';
         }
         tabella += '</tbody></table>';
         $('#prenotazioni').append(tabella);
+        console.log(risp);
       }
     })
   }
-      
+
+function addPre(){
+  $("#formPre").show();
+  $("#prenotazioni").hide();
+
+}
 
 </script>
 <?php
@@ -368,4 +426,12 @@ if(isset($_GET["successdelete"])){
       $("#successo").fadeIn();
       </script>';
       }
+
+if(isset($_GET["successPre"])){
+      echo '<script>  
+          clickprenotazioni();
+          $("#successPre").show();
+          $("#prenotazioni").show();
+          </script>';
+          }
 ?>

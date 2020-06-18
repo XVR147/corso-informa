@@ -5,6 +5,13 @@ class soci{
       public function __construct($db){
        $this->db=$db;
       }
+      public function getListaSoci(){
+        $scesoci = "SELECT * FROM `ct_soci`";
+                $soci = $this->db->query($scesoci);
+                foreach ($soci as $socio) {
+                echo "<option value=\"".$socio['id']."\">".$socio['nome']." ".$socio['cognome']. "</option>";
+                 }
+      }
       public function getSoci(){
         $richiesta="SELECT * FROM `ct_soci` WHERE `stato`=1";
         $elencosoci=$this->db->query($richiesta);
@@ -41,6 +48,13 @@ class campi{
   private $db="";
   public function __construct($db){
    $this->db=$db;
+  }
+  public function getListaCampi(){
+    $scecampi = "SELECT * FROM `ct_campi`";
+                $campi = $this->db->query($scecampi);
+                foreach ($campi as $campo) {
+                echo "<option value=\"".$campo['id']."\">".$campo['nome_campo']. " ".$campo['tipo_campo']. "(".$this->getCopertura($campo['copertura']).")"."</option>";
+                 }
   }
   public function getCampi(){
     $richiesta="SELECT * FROM `ct_campi`";
@@ -79,5 +93,8 @@ public function getCopertura($copertura){
 
 
 }
+
+
+
 
 ?>

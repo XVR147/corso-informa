@@ -167,16 +167,45 @@ $tabCampi->getCampi();
 
 <div id="formPre"class="container" style="display:none;">
   <form id="formaggPre"action="prenotasub.php" method="POST">
-    <div class="form-group">
-      <label for="soci">Scegli Socio<small style="color:red;">*</small></label>
-          <select name="soci" id="soci" class="custom-select">
-              <?php
-                $classsocio->getListaSoci();
-              ?>
+  <div class="form-group">
+    <label for="exampleInputPassword1">Data di prenotazione<small style="color:red;">*</small></label>
+    <input type="date" class="form-control" id="datadiprenotazione"name="prenota">
+  </div>
+  <div class="form-group">
+  <label for="orariinizio">Orario di inizio<small style="color:red;">*</small></label>
+  <select name="orariinizio" id="orariinizio" class="custom-select">
+              <option value="9:00">9:00</option>
+              <option value="10:00">10:00</option>
+              <option value="11:00">11:00</option>
+              <option value="12:00">12:00</option>
+              <option value="13:00">13:00</option>
+              <option value="14:00">14:00</option>
+              <option value="15:00">15:00</option>
+              <option value="16:00">16:00</option>
+              <option value="17:00">17:00</option>
+              <option value="18:00">18:00</option>
+              <option value="19:00">19:00</option>
           </select>
-           <small id="smallnomeaggiungi"></small>
-    </div>
-    <div class="form-group">
+  </div>
+  <div class="form-group">
+  <label for="orariprenotazioni">Tempo di prenotazione<small style="color:red;">*</small></label>
+  <select name="orariprenotazioni" id="orariprenotazioni" class="custom-select">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+          </select>
+  </div>
+  
+</form><br>
+<div class="posizione">
+  <button type="submit" class="btn btn-primary" onclick="salvaPre()">Aggiungi</button>
+  <button type="submit" class="btn btn-danger float-right" onclick="annulla()">Annulla</button>
+</div>
+</div>
+
+
+<div class="form-group">
+<form id="prenotazionidisponibili" action=".php" method="POST">
     <label for="exampleInputPassword1">Campi<small style="color:red;">*</small></label>
     <select name="campi" id="campi" class="custom-select">
               <?php
@@ -186,15 +215,14 @@ $tabCampi->getCampi();
            <small id="smallnomeaggiungi"></small>
   </div>
   <div class="form-group">
-    <label for="exampleInputPassword1">Data di prenotazione<small style="color:red;">*</small></label>
-    <input type="datetime-local" class="form-control" id="datadiprenotazione"name="prenota">
-  </div>
-</form><br>
-<div class="posizione">
-  <button type="submit" class="btn btn-primary" onclick="salvaPre()">Aggiungi</button>
-  <button type="submit" class="btn btn-danger float-right" onclick="annulla()">Annulla</button>
-</div>
-</div>
+      <label for="soci">Scegli Socio<small style="color:red;">*</small></label>
+          <select name="soci" id="soci" class="custom-select">
+              <?php
+                $classsocio->getListaSoci();
+              ?>
+          </select>
+           <small id="smallnomeaggiungi"></small>
+    </div>
 
 
 <!-- Optional JavaScript -->
@@ -253,8 +281,20 @@ function salva(){
 }
 
 function salvaPre(){
-  $('#formaggPre').submit();
-}
+  var data = $('#datadiprenotazione').val();
+  var orainizio = $('#orariinizio').val();
+  var tempo = $('#orariprenotazioni').val();
+  $.ajax({
+          url:"check.php",
+          method:"POST",
+          data: "data="+ data + "&orariinizio="+ orainizio + "&orariprenotazioni="+ tempo,
+          type:JSON,
+          success:function(data){
+            data=JSON.parse(data);
+            console.log(data);
+            }
+          })
+        }
       function update(id,nome,cognome,data,codicef){
       $("#formMod").fadeIn();
       $("#soci").hide();
@@ -381,9 +421,9 @@ function clickprenotazioni(){
       type:JSON,
       success:function(response){
         var risp = JSON.parse(response);
-        let tabella = '<table class="table table-bordered"><thead><tr><th scope="col">#</th><th scope="col">Data prenotazione</th><th scope="col">Nome campo</th><th scope="col">Tipo campo</th><th scope="col">Socio</th></tr></thead><tbody>';
+        let tabella = '<table class="table table-bordered"><thead><tr><th scope="col">#</th><th scope="col">Data prenotazione</th><th scope="col">Data inizio</th><th scope="col">Data fine</th><th scope="col">Nome campo</th><th scope="col">Tipo campo</th><th scope="col">Socio</th></tr></thead><tbody>';
         for(let i=0; i<risp.length; i++){
-          tabella += '<tr><th scope="col">'+risp[i]['id']+'</th><td>'+risp[i]['data_prenotazione']+'</td><td>'+risp[i]['nome_campo']+'</td><td>'+risp[i]['tipo_campo']+'</td><td>'+risp[i]['nome_socio']+'</td></tr>';
+          tabella += '<tr><th scope="col">'+risp[i]['id']+'</th><td>'+risp[i]['data_prenotazione']+'</td><td>'+risp[i]['data_inizio']+'</td><td>'+risp[i]['data_fine']+'</td><td>'+risp[i]['nome_campo']+'</td><td>'+risp[i]['tipo_campo']+'</td><td>'+risp[i]['nome_socio']+'</td></tr>';
         }
         tabella += '</tbody></table>';
         $('#prenotazioni').append(tabella);

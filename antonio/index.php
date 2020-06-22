@@ -474,4 +474,19 @@ if(isset($_GET["successPre"])){
           $("#prenotazioni").show();
           </script>';
           }
+
+    $time = '09:00';
+
+    $periodo = 5;
+
+    $timeFin = (int) $time;
+
+    echo $timeFin;
+
+    $timeFin = $timeFin + $periodo;
+
+    $timeFin = (string) $timeFin.":00:00";
+
+    echo $timeFin;
+
 ?>

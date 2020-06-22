@@ -1,19 +1,46 @@
 <?php
-echo json_encode($_POST);
-$time = "13:00";
-    $periodo = 3;
+	require_once("database.php");
 
-    $timeFin = (int) $time;
 
-    echo $timeFin;
 
-    $timeFin = $timeFin + $periodo;
+	$data = $_POST['data'];
 
-    $timeFin = (string) $timeFin.":00";
+	$tempo = $_POST['orariinizio'];
 
-    echo $timeFin;
+    $periodo = $_POST['orariprenotazioni'];
 
-    $query = "SELECT id_campi FROM prenotazioni WHERE NOT (data_inizio BETWEEN $time AND $timeFin)";
+    $tempo = date('H:i:s', strtotime($tempo));
+
+    $time = new DateTime($tempo);
+
+	$time->add(new DateInterval("PT{$periodo}H"));
+
+	$newTime = $time->format('H:i:s');
+
+
+    $query = "SELECT * FROM `ct_prenotazioni` WHERE `data_prenotazione` = '$data' AND NOT ((`orario_fine` <= '$tempo') OR ( `orario_inizio` >= '$newTime'))";
+
+   	$prenota = $db->query($query);
+
+   	$notex = "SELECT * FROM `ct_campi`";
+
+   	$risul = $db->query($notex);
+
+   	$campo = array();
+
+   	foreach ($risul as $ri) {
+   		array_push($campo, array(
+   			"id"=>$ri['id'],
+   			"nome"=>$ri['nome_campo']));
+   	}
+
+    foreach ($prenota as $pr) {
+
+    	array_splice($campo, $pr['id_campo_prenotato'], -1);
+    	 
+    }
+
+print_r($campo);
 
 
 

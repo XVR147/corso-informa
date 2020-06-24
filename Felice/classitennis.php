@@ -13,7 +13,7 @@ class soci{
             }
       }
       public function getSoci(){
-        $richiesta="SELECT * FROM `ct_soci` WHERE `stato`=1";
+        $richiesta="SELECT * FROM `ct_soci` WHERE `stato`=1 ORDER BY `nome`,`cognome`";
         $elencosoci=$this->db->query($richiesta);
         if(!$elencosoci->num_rows){
           echo "Sei fallito";
@@ -25,7 +25,9 @@ class soci{
           <th scope="col">Nome</th>
           <th scope="col">Cognome</th>
           <th scope="col">Codice fiscale</th>
+          <th scope="col">Tessera</th>
           <th scope="col">Azioni</th>
+
         </tr>
       </thead>
       <tbody>';
@@ -34,8 +36,9 @@ class soci{
                <td>'.$socii["nome"].'</td>
                <td>'.$socii["cognome"].'</td>
                <td>'.$socii["codice_fiscale"].'</td>
+               <td>Tessera</td>
                <td><img onclick="update('.$socii["id"].",'".$socii["nome"]."','".$socii["cognome"]."','".$socii["data_nascita"]."','".$socii["codice_fiscale"]."'".')"src="https://img.icons8.com/ios-glyphs/30/000000/design.png/"> <img onclick="cancella('.$socii["id"].')"src="https://img.icons8.com/wired/32/000000/filled-trash.png/"></td>
-              </tr>';
+               </tr>';
             
        }
      echo ' </tbody> </table>';

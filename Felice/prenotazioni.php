@@ -1,6 +1,6 @@
 <?php
 require_once("database.php");
-$prenotazioni="SELECT * FROM `ct_prenotazioni`";
+$prenotazioni="SELECT * FROM `ct_prenotazioni` ORDER BY `data_prenotazione`,`orario_inizio` ";
 $results = $db->query($prenotazioni);
 
 $prenotazione = array();

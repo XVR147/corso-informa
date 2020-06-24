@@ -116,6 +116,25 @@ $socio = new soci($db);
         <input type="date" class="form-control" id="datadinascita"name="birthday">
         <p id="messaggioerrore4" style="display:none;">Data di nascita inserita non corretta</p>
       </div>
+      <div class="form-group">
+        <label for="exampleInputPassword1">Data inizio Abbonamento<small style="color:red;">*</small></label>
+        <input type="date" class="form-control" id="datastart"name="dataStart">
+        <p id="messaggioerrore5" style="display:none;">Data inserita non corretta</p>
+      </div>
+      <div class="form-group">
+      <label>Tipo Abbonamento<small style="color:red;">*</small></label>
+      <select name="tipiabb" id="tipoAbb" title="Scegli un abbonamento" class="custom-select">
+      <option value="0" selected hidden>Seleziona tipo tessera</option>
+      <option value="1">Bronzo</option>
+      <option value="2">Argento</option>
+      <option value="3">Oro</option>
+      </select>
+      </div>
+      <div class="form-group" id="scadenzaabb" style="display:none;">
+        <label for="exampleInputPassword1">Scadenza abbonamento<small style="color:red;">*</small></label>
+        <input type="date" class="form-control" id="scadabb"name="dataend">
+        <p id="messaggioerrore6" style="display:none;">Data inserita non corretta</p>
+      </div>
     </form><br>
     <div class="posizione">
       <button type="submit" class="btn btn-primary" onclick="salva()">Aggiungi</button>
@@ -285,9 +304,20 @@ function addPrenotazioni(){
     $("#prenotazioni").hide();
     $("#formPre").show();
     $("#prenota").show();
+    window.history.replaceState({}, document.title, "/" +"GitHub/corso-informa/Felice/index.php");
+    $("#successPre").hide();
+    
+
 }
 function salvaPre(){
   var datapre = $('#datapre').val();
+  if(datapre==""){
+    $('#erroredata').remove();
+    $("#datapre").after('<p id="erroredata" style="color:red;">Inserisci data</p>')
+    $("#datapre").css("border-color","red");
+  }else{
+    $('#erroredata').remove();
+    $("#datapre").css("border-color","#ced4da");
   var orainizio = $('#orainiziopre').val();
   var orafine = $('#orafinepre').val();
   $.ajax({
@@ -298,12 +328,14 @@ function salvaPre(){
             success:function(data){
                     data=JSON.parse(data);
                     console.log(data);  
+                    if(data.length <1){
+                          $("#fullmessage").remove();
+                          $('#orafinepre').after('<p id="fullmessage" style="color:red;">Campi non disponibili</p>');
+                    }else{
                     $("#prenotazione2").show();
                     $("#prenota").hide();
                     $("#inviaPren").show();
-                    if(data.length <1){
-                          alert("Alert Carino");
-                    }else{
+                       $("#fullmessage").remove();
                         for(let i=0;i<data.length;i++){
                         var listOption = "<option value="+data[i]['id']+">"+data[i]['nome_campo']+" "+data[i]['tipo_campo']+" "+"</option>";
                         $("#ListaCampiPrenotabili").append(listOption);
@@ -312,6 +344,7 @@ function salvaPre(){
                     
             }        
       })
+  }
 }
 function inviaPrenotazione(){
   var datapre = $('#datapre').val();
@@ -327,7 +360,7 @@ function inviaPrenotazione(){
            success:function(data){
                     data=JSON.parse(data);
                     console.log(data);
-                    window.location.href="index.php";
+                    window.location.href="index.php?successPre";
            }
 
 
@@ -369,15 +402,62 @@ function clickprenotazioni(){
 
 }
 
+function setDataScadenza(datainizio,mesiscadenza){
+datainizio=new Date(datainizio);
+datainizio=formatDate(datainizio);
+console.log(datainizio);
+let datascadenza=datainizio.setMonth(datainizio.getMonth()+mesiscadenza);
+return datascadenza;
+}
+function formatDate(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) 
+        month = '0' + month;
+    if (day.length < 2) 
+        day = '0' + day;
+
+    return [year, month, day].join('-');
+}
 
 function salva(){
   let nomesocio=$("#nome");
   let cognomesocio=$("#surname");
   let cfsocio=$("#codicefisc");
   let nascitasocio=$("#datadinascita");
+  let datainizio=$("#datastart");
+  let tipoabbonamento=$("#tipoAbb");
+  let datafine=$("#scadabb");
   let contatore=validation(nomesocio,cognomesocio,cfsocio,nascitasocio);
   if (contatore==0){
-    $('#formagg').submit();
+    if(datainizio.val()==""){
+      let datadefault=new Date();
+      datainizio.val(formatDate(datadefault));
+
+    }
+    let scadenzaabb="";
+    switch (tipoabbonamento.val()) {
+        case "0":
+        alert("Error");
+        break;
+        case "1":
+        scadenzaabb+=setDataScadenza(datainizio.val(),3);
+        break;
+        case "2":
+        scadenzaabb+=setDataScadenza(datainizio.val(),6);
+        break;
+        case "3":
+        scadenzaabb+=setDataScadenza(datainizio.val(),12);
+        break;
+    
+        default:
+        break;
+    }
+    console.log(scadenzaabb);
+    //$('#formagg').submit();
   }
 }
       function update(id,nome,cognome,data,codicef){
@@ -524,5 +604,7 @@ if(isset($_GET["successPre"])){
         $("#successPre").fadeIn();
         </script>';
 }
+
+
       
 ?>

@@ -32,7 +32,7 @@ include("classitennis.php");
         <a class="nav-link" href="#" onclick="clickcampi()">Campi da gioco</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Prenotazioni</a>
+        <a class="nav-link" href="#" onclick="clickprenotazioni()">Prenotazioni</a>
       </li>
     </ul>
   </div>
@@ -87,14 +87,17 @@ $tabCampi=new campi($db);
 $tabCampi->getCampi();
 ?>
 </div>
+<div id=successoDel style="display:none;">
+<span style="color:red;">Utente Eliminato con successo</span>
+</div>
 
 <!--Form aggiungi socio-->
 <div id="formAdd"class="container" style="display:none;">
   <form id="formagg"action="nuovisoci.php" method="POST">
     <div class="form-group">
-      <label for="exampleInputEmail1">Nome<small style="color:red;">*</small></label>
+      <label for="nome">Nome<small style="color:red;">*</small></label>
       <input type="text"  class="form-control" id="nome" aria-describedby="emailHelp" name="name">
-      <p id="messaggioerrore1" style="display:none;">Nome inserito non corretto</p>
+      <small id="smallnomeaggiungi"></small>
     </div>
     <div class="form-group">
     <label for="exampleInputPassword1">Cognome<small style="color:red;">*</small></label>
@@ -113,7 +116,7 @@ $tabCampi->getCampi();
   </div>
 </form><br>
 <div class="posizione">
-  <button type="submit" class="btn btn-primary" onclick="salva()">Salva</button>
+  <button type="submit" class="btn btn-primary" onclick="salva()">Aggiungi</button>
   <button type="submit" class="btn btn-danger float-right" onclick="annulla()">Annulla</button>
 </div>
 </div>
@@ -160,6 +163,7 @@ $tabCampi->getCampi();
   </html>
   <script>
 
+//FUNZIONI NAVBAR
 function clicksoci(){
   $("#carosello").hide();
   $("#soci").fadeIn();
@@ -174,6 +178,7 @@ function add(){
   $("#bottoni").hide();
   $("#formAdd").fadeIn();
   $("#successoMod").hide();
+  $("#formMod").hide();
 
 }
 function annulla(){
@@ -191,55 +196,25 @@ $("#bottoni").hide();
 $("#successo").hide();
 $("#successoMod").hide();
 }
+function clickprenotazioni(){
+$("#carosello").hide();
+$("#campi").hide();
+$("#soci").hide();
+$("#bottoni").hide();
+$("#successo").hide();
+$("#successoMod").hide();
+
+}
+
 function salva(){
-  let nomesocio=$("#nome").val();
-  let cognomesocio=$("#surname").val();
-  let cfsocio=$("#codicefisc").val();
-  let nascitasocio=$("#datadinascita").val();
-  let datanascita=new Date(nascitasocio);
-  annonascita=datanascita.getFullYear();
-  let dataoggi=new Date();
-  dataoggi=dataoggi.getFullYear();
-  let maggioranza=dataoggi-annonascita;
-  let contatore=0;
-
-     if(nomesocio.length<3 || nomesocio.length>64){
-       contatore+=1;
-       $("#nome").css("border-color","red");
-       $("#messaggioerrore1").show().css("color","red");
-     }else{
-       $("#nome").css("border-color","black");
-       $("#messaggioerrore1").hide();
-     }
-     if(cognomesocio.length<1 || cognomesocio.length>128){
-      contatore+=1;
-      $("#surname").css("border-color","red");
-      $("#messaggioerrore2").show().css("color","red");
-     }else{
-      $("#surname").css("border-color","black");
-       $("#messaggioerrore2").hide();
-     }
-     if(cfsocio.length!=16){
-      contatore+=1;
-      $("#codicefisc").css("border-color","red");
-      $("#messaggioerrore3").show().css("color","red");
-     }else{
-      $("#codicefisc").css("border-color","black");
-       $("#messaggioerrore3").hide();
-     }
-     if(maggioranza<18 || nascitasocio==""){
-      contatore+=1;
-      $("#datadinascita").css("border-color","red");
-      $("#messaggioerrore4").show().css("color","red");
-     }else{
-      $("#datadinascita").css("border-color","black");
-       $("#messaggioerrore4").hide();
-     }
-
-     if(contatore==0){
-     $("#formagg").submit();
-     }
-
+  let nomesocio=$("#nome");
+  let cognomesocio=$("#surname");
+  let cfsocio=$("#codicefisc");
+  let nascitasocio=$("#datadinascita");
+  let contatore=validation(nomesocio,cognomesocio,cfsocio,nascitasocio);
+  if (contatore==0){
+    $('#formagg').submit();
+  }
 }
       function update(id,nome,cognome,data,codicef){
       $("#formMod").fadeIn();
@@ -253,25 +228,104 @@ function salva(){
 
      $("#salvaModifica").click(function(){
        let id=$("#getId").val();
-       let nomemod=$("#nomeUp").val();
-       let cognomemod=$("#surnameUp").val();
-       let datamod=$("#datadinascitaUp").val();
-       let codicemod=$("#codicefiscUp").val();
-       $.ajax({
+       let nomemod=$("#nomeUp");
+       let cognomemod=$("#surnameUp");
+       let datamod=$("#datadinascitaUp");
+       let codicemod=$("#codicefiscUp");
+       let contatore=validation(nomemod,cognomemod,codicemod,datamod);
+       console.log(cognomemod);
+       if (contatore==0){
+
+        $.ajax({
          url:"modifica.php",
          method:"POST",
-         data:"id="+id+"&nome="+nomemod+"&cognome="+cognomemod+"&datamod="+datamod+"&codicemod="+codicemod,
+         data:"id="+id+"&nome="+nomemod.val()+"&cognome="+cognomemod.val()+"&datamod="+datamod.val()+"&codicemod="+codicemod.val(),
         type:JSON,
         success:function(data){
         data=JSON.parse(data);
         console.log(data);
         if(data["risultato"]){
         window.location.href="index.php?success2&id="+data["id"];
+        
         }
         }
 
+      }) }
+     }) 
+
+     function validation(inputnome,inputcognome,inputcodicef,inputdata){
+      let contatore=0;
+      let datanascita=new Date(inputdata.val());
+      annonascita=datanascita.getFullYear();
+      let dataoggi=new Date();
+      dataoggi=dataoggi.getFullYear();
+      let maggioranza=dataoggi-annonascita;
+      /* labelattuale = labelattuale+"Errore!";
+      dovelodevimettere.html(labelattuale); */
+
+      if(inputnome.val().length<3 || inputnome.val().length>64){
+       contatore+=1;
+       $('#gastema').remove();
+       inputnome.css("border-color","red");
+       inputnome.after('<p id="gastema" style="color:red;">Nome inserito non corretto</p>');
+     }else{
+       inputnome.css("border-color","black");
+       $('#gastema').remove();
+     }
+     if(inputcognome.val().length<1 || inputcognome.val().length>128){
+      contatore+=1;
+      $('#gastema2').remove();
+      inputcognome.css("border-color","red");
+      inputcognome.after('<p id="gastema2" style="color:red;">Cognome inserito non corretto</p>');
+     }else{
+      inputcognome.css("border-color","black");
+      $('#gastema2').remove();
+      
+     }
+     if(inputcodicef.val().length!=16){
+      contatore+=1;
+      $('#gastema3').remove();
+      inputcodicef.css("border-color","red");
+      inputcodicef.after('<p id="gastema3" style="color:red;">Codice fiscale inserito non corretto</p>');
+     }else{
+      inputcodicef.css("border-color","black");
+      $('#gastema3').remove();
+      
+     }
+     if(maggioranza<18 || inputdata.val()==""){
+      contatore+=1;
+      $('#gastema4').remove();
+      inputdata.css("border-color","red");
+      inputdata.after('<p id="gastema4" style="color:red;">Data inserita non corretto</p>');
+     }else{
+      inputdata.css("border-color","black");
+      $('#gastema4').remove();
+     }
+     return contatore;
+     }
+
+function cancella(iddelete){
+  
+  var result = confirm("Sei sicuro di voler cancellare questo campo?");
+  if (result){
+
+      $.ajax({
+          url:"elimina.php",
+          method:"POST",
+          data:"id="+iddelete,
+          type:JSON,
+          success:function(data){
+            data=JSON.parse(data);
+            console.log(data);
+            if(data["risultato"]){
+            window.location.href="index.php?successdelete&id="+data["id"];
+          
+            }
+          }
+
       })
-     })
+  }     
+}
       
 
 </script>
@@ -297,5 +351,18 @@ if(isset($_GET["error"])){
                     
                     </script>';
                     }
-
+                    if(isset($_GET["successdelete"])){
+                      echo '<script>  
+                          clicksoci();
+                          $("#successoDel").fadeIn();
+                          </script>';
+                          }
+                
+                if(isset($_GET["error"])){
+                     echo '<script>$(document).ready(function(){
+                             clicksoci();
+                               add();
+                                $("#errore").fadeIn();
+                                 })</script>';
+                              }
 ?>

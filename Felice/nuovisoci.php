@@ -14,7 +14,6 @@ if(isset($_POST)){
  $query="INSERT INTO `ct_soci`(`nome`, `cognome`, `data_nascita`, `codice_fiscale`) VALUES (?,?,?,?)";
  $query2="INSERT INTO `ct_tessera`(`data_rilascio_tessera`, `scadenza_tessera`, `codice_tessera`, `id_user`, `tipo_abbonamento`) VALUES (?,?,?,?,?)";
 
-
  if($stmt=$db->prepare($query)){
      $stmt->bind_param("ssss",$nomeNewSocio,$cognomeNewSocio,$datanascitaNewSocio,$codicefiscNewSocio);
      if($stmt->execute()){

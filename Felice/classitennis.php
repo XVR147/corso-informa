@@ -13,7 +13,7 @@ class soci{
             }
       }
       public function getSoci(){
-        $richiesta="SELECT * FROM `ct_soci` WHERE `stato`=1 ORDER BY `nome`,`cognome`";
+        $richiesta="SELECT * FROM `ct_soci` s INNER JOIN ct_tessera t ON (s.id=t.id_user) WHERE s.stato=1";
         $elencosoci=$this->db->query($richiesta);
         if(!$elencosoci->num_rows){
           echo "Sei fallito";
@@ -32,19 +32,29 @@ class soci{
       </thead>
       <tbody>';
        foreach($elencosoci as $socii){
-         echo '<tr><th scope="row">'.$socii["id"].'</th>
+         $idsocio=$socii["id"];
+         echo '<tr><th scope="row">'.$idsocio.'</th>
                <td>'.$socii["nome"].'</td>
                <td>'.$socii["cognome"].'</td>
                <td>'.$socii["codice_fiscale"].'</td>
-               <td>Tessera</td>
-               <td><img onclick="update('.$socii["id"].",'".$socii["nome"]."','".$socii["cognome"]."','".$socii["data_nascita"]."','".$socii["codice_fiscale"]."'".')"src="https://img.icons8.com/ios-glyphs/30/000000/design.png/"> <img onclick="cancella('.$socii["id"].')"src="https://img.icons8.com/wired/32/000000/filled-trash.png/"></td>
+               <td>'.$socii["codice_tessera"].'</td>
+               <td><img onclick="update('.$socii["id"].",'".$socii["nome"]."','".$socii["cognome"]."','".$socii["data_nascita"]."','".$socii["codice_fiscale"]."','".$socii["data_rilascio_tessera"]."','".$socii["scadenza_tessera"]."','".$socii["codice_tessera"]."','".$socii["tipo_abbonamento"]."'".')"src="https://img.icons8.com/ios-glyphs/30/000000/design.png/"> <img onclick="cancella('.$socii["id"].')"src="https://img.icons8.com/wired/32/000000/filled-trash.png/"></td>
                </tr>';
             
        }
      echo ' </tbody> </table>';
       } 
 }
-}
+      function getCard($id,$length = 15) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString =$id."_CT_";
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
+    }
 
 //CLASSE CAMPI
 class campi{

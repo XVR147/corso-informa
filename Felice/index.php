@@ -123,7 +123,7 @@ $socio = new soci($db);
       </div>
       <div class="form-group">
       <label>Tipo Abbonamento<small style="color:red;">*</small></label>
-      <select name="tipiabb" id="tipoAbb" title="Scegli un abbonamento" class="custom-select">
+      <select name="tipiabb" id="tipoAbb" title="Scegli un abbonamento" class="custom-select" onchange="popolamentoScadenza()">
       <option value="0" selected hidden>Seleziona tipo tessera</option>
       <option value="1">Bronzo</option>
       <option value="2">Argento</option>
@@ -166,6 +166,30 @@ $socio = new soci($db);
     <input type="date" class="form-control" id="datadinascitaUp"name="birthdayUp">
     <p id="messaggioerrore4Up" style="display:none;">Data di nascita inserita non corretta</p>
   </div>
+  <div class="form-group">
+        <label for="exampleInputPassword1">Data inizio Abbonamento<small style="color:red;">*</small></label>
+        <input type="date" class="form-control" id="datastart2"name="dataStart2">
+        <p id="messaggioerrore5" style="display:none;">Data inserita non corretta</p>
+   </div>
+      <div class="form-group" id="scadenzaabb">
+        <label for="exampleInputPassword1">Scadenza abbonamento<small style="color:red;">*</small></label>
+        <input type="date" class="form-control" id="scadabb2"name="dataend2">
+        <p id="messaggioerrore6" style="display:none;">Data inserita non corretta</p>
+      </div>
+      <div class="form-group">
+    <label for="exampleInputPassword1">Codice tessera</label>
+    <input type="text" class="form-control" id="codicetessera"name="codicecard" readonly>
+    <p id="messaggioerrore3Up" style="display:none;">Codice fiscale inserito non corretto</p>
+  </div>
+   <div class="form-group">
+   <label>Tipo Abbonamento<small style="color:red;">*</small></label>
+    <select name="tipiabb2" id="tipoAbb2" title="Scegli un abbonamento" class="custom-select" onchange="popolamentoScadenza()">
+      <option value="0" selected hidden>Seleziona tipo tessera</option>
+      <option value="1">Bronzo</option>
+      <option value="2">Argento</option>
+      <option value="3">Oro</option>
+      </select>
+      </div>
 </form><br>
 <div class="posizione">
   <button class="btn btn-primary" id="salvaModifica">Salva</button>
@@ -403,12 +427,16 @@ function clickprenotazioni(){
 }
 
 function setDataScadenza(datainizio,mesiscadenza){
-datainizio=new Date(datainizio);
-datainizio=formatDate(datainizio);
-console.log(datainizio);
-let datascadenza=datainizio.setMonth(datainizio.getMonth()+mesiscadenza);
-return datascadenza;
+  datainizio=new Date(datainizio);
+  var d = datainizio.getDate();
+    datainizio.setMonth(datainizio.getMonth() + +mesiscadenza);
+    if (datainizio.getDate() != d) {
+      datainizio.setDate(0);
+    }
+    datainizio=formatDate(datainizio);
+    return datainizio;
 }
+
 function formatDate(date) {
     var d = new Date(date),
         month = '' + (d.getMonth() + 1),
@@ -428,11 +456,15 @@ function salva(){
   let cognomesocio=$("#surname");
   let cfsocio=$("#codicefisc");
   let nascitasocio=$("#datadinascita");
-  let datainizio=$("#datastart");
-  let tipoabbonamento=$("#tipoAbb");
-  let datafine=$("#scadabb");
   let contatore=validation(nomesocio,cognomesocio,cfsocio,nascitasocio);
   if (contatore==0){
+    $('#formagg').submit();
+  }
+}
+   function popolamentoScadenza(){
+    let datainizio=$("#datastart");
+    let tipoabbonamento=$("#tipoAbb");
+    let datafine=$("#scadabb");
     if(datainizio.val()==""){
       let datadefault=new Date();
       datainizio.val(formatDate(datadefault));
@@ -456,11 +488,11 @@ function salva(){
         default:
         break;
     }
-    console.log(scadenzaabb);
-    //$('#formagg').submit();
-  }
-}
-      function update(id,nome,cognome,data,codicef){
+    $("#scadabb").val(scadenzaabb);
+    $("#scadenzaabb").show();
+
+   }
+      function update(id,nome,cognome,data,codicef,dataril,datascad,codicet,tipoabb){
       $("#formMod").fadeIn();
       $("#soci").hide();
       $("#getId").val(id);
@@ -468,6 +500,9 @@ function salva(){
       $("#surnameUp").val(cognome);
       $("#datadinascitaUp").val(data);
       $("#codicefiscUp").val(codicef);
+      $("#datastart2").val(dataril);
+      $("#scadabb2").val(datascad);
+      $("#codicetessera").val(codicet);
         };
 
      $("#salvaModifica").click(function(){

@@ -13,9 +13,10 @@ class soci{
             }
       }
       public function getSoci(){
-        $richiesta="SELECT * FROM `ct_soci` s INNER JOIN ct_tessera t ON (s.id=t.id_user) WHERE s.stato=1";
+        $richiesta="SELECT s.id AS u, s.*, t.* FROM `ct_soci` s INNER JOIN ct_tessera t ON (s.id=t.id_user) WHERE s.stato=1";
         $elencosoci=$this->db->query($richiesta);
-        if(!$elencosoci->num_rows){
+        
+        if(!$elencosoci){
           echo "Sei fallito";
         }else{
      echo '<table class="table table-bordered">
@@ -32,13 +33,13 @@ class soci{
       </thead>
       <tbody>';
        foreach($elencosoci as $socii){
-         $idsocio=$socii["id"];
+         $idsocio=$socii["u"];
          echo '<tr><th scope="row">'.$idsocio.'</th>
                <td>'.$socii["nome"].'</td>
                <td>'.$socii["cognome"].'</td>
                <td>'.$socii["codice_fiscale"].'</td>
                <td>'.$socii["codice_tessera"].'</td>
-               <td><img onclick="update('.$socii["id"].",'".$socii["nome"]."','".$socii["cognome"]."','".$socii["data_nascita"]."','".$socii["codice_fiscale"]."','".$socii["data_rilascio_tessera"]."','".$socii["scadenza_tessera"]."','".$socii["codice_tessera"]."','".$socii["tipo_abbonamento"]."'".')"src="https://img.icons8.com/ios-glyphs/30/000000/design.png/"> <img onclick="cancella('.$socii["id"].')"src="https://img.icons8.com/wired/32/000000/filled-trash.png/"></td>
+               <td><img onclick="update('.$socii["u"].",'".$socii["nome"]."','".$socii["cognome"]."','".$socii["data_nascita"]."','".$socii["codice_fiscale"]."','".$socii["data_rilascio_tessera"]."','".$socii["scadenza_tessera"]."','".$socii["codice_tessera"]."','".$socii["tipo_abbonamento"]."'".')"src="https://img.icons8.com/ios-glyphs/30/000000/design.png/"> <img onclick="cancella('.$socii["u"].')"src="https://img.icons8.com/wired/32/000000/filled-trash.png/"></td>
                </tr>';
             
        }

@@ -183,7 +183,7 @@ $socio = new soci($db);
   </div>
    <div class="form-group">
    <label>Tipo Abbonamento<small style="color:red;">*</small></label>
-    <select name="tipiabb2" id="tipoAbb2" title="Scegli un abbonamento" class="custom-select" onchange="popolamentoScadenza()">
+    <select name="tipiabb2" id="tipoAbb2" title="Scegli un abbonamento" class="custom-select" onchange="aggScadenza()">
       <option value="0" selected hidden>Seleziona tipo tessera</option>
       <option value="1">Bronzo</option>
       <option value="2">Argento</option>
@@ -492,6 +492,49 @@ function salva(){
     $("#scadenzaabb").show();
 
    }
+
+  function aggScadenza(){
+    let tipoabbonamento=$("#tipoAbb2");
+    let datafine=$("#scadabb2");
+    let dataoggi = new Date();
+    let dataend = new Date(datafine.val());
+    dataoggi = dataoggi.getTime();
+    dataend = dataend.getTime();
+    if(dataend < dataoggi ){
+      let dataattuale = new Date();
+      dataattuale = formatDate(dataattuale);
+      datafine.val(dataattuale);
+      
+    }
+
+    if(datafine.val()==""){
+      let datadefault=new Date();
+      datafine.val(formatDate(datadefault));
+
+    }
+    let scadenzaabb="";
+    switch (tipoabbonamento.val()) {
+        case "0":
+        alert("Error");
+        break;
+        case "1":
+        scadenzaabb+=setDataScadenza(datafine.val(),3);
+        break;
+        case "2":
+        scadenzaabb+=setDataScadenza(datafine.val(),6);
+        break;
+        case "3":
+        scadenzaabb+=setDataScadenza(datafine.val(),12);
+        break;
+    
+        default:
+        break;
+    }
+    $("#scadabb2").val(scadenzaabb);
+    
+
+   }
+
       function update(id,nome,cognome,data,codicef,dataril,datascad,codicet,tipoabb){
       $("#formMod").fadeIn();
       $("#soci").hide();
@@ -511,13 +554,14 @@ function salva(){
        let cognomemod=$("#surnameUp");
        let datamod=$("#datadinascitaUp");
        let codicemod=$("#codicefiscUp");
+       let tipoabbo=$("#tipoAbb2");
+       let dataendabb=$("#scadabb2");
        let contatore=validation(nomemod,cognomemod,codicemod,datamod);
-       console.log(cognomemod);
        if (contatore==0){
             $.ajax({
             url:"modifica.php",
             method:"POST",
-            data:"id="+id+"&nome="+nomemod.val()+"&cognome="+cognomemod.val()+"&datamod="+datamod.val()+"&codicemod="+codicemod.val(),
+            data:"id="+id+"&nome="+nomemod.val()+"&cognome="+cognomemod.val()+"&datamod="+datamod.val()+"&codicemod="+codicemod.val()+"&tipoabbo="+tipoabbo.val()+"&dataendabb="+dataendabb.val(),
             type:JSON,
                 success:function(data){
                     data=JSON.parse(data);
